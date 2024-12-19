@@ -37,9 +37,9 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IExtension
         panel = JPanel()
         panel.setLayout(BoxLayout(panel, BoxLayout.Y_AXIS))
         
-        button = JButton("Toggle Log Stream")
-        button.addActionListener(self.toggle_logging)
-        panel.add(button)
+        self.button = JButton("Start Log Stream")
+        self.button.addActionListener(self.toggle_logging)
+        panel.add(self.button)
 
         # Create custom ITab to add the panel as a Burp Suite tab
         custom_tab = CustomTab(panel)
@@ -53,8 +53,10 @@ class BurpExtender(IBurpExtender, IHttpListener, IContextMenuFactory, IExtension
         self.is_logging = not self.is_logging
         if self.is_logging:
             self.stdout.println("Log stream started.")
+            self.button.setText("Stop Log Stream")  # Update button text when logging starts
         else:
             self.stdout.println("Log stream stopped.")
+            self.button.setText("Start Log Stream")  # Update button text when logging stops
     
     def processHttpMessage(self, toolFlag, messageIsRequest, messageInfo):
         """Capture and save requests/responses when logging is enabled"""
